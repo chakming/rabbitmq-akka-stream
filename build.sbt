@@ -20,7 +20,7 @@ scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation", "-encoding", "ut
 libraryDependencies ++= {
   Seq(
     "com.typesafe.akka"          %%  "akka-actor"               % "2.3.7",
-    "com.typesafe.akka"          %%  "akka-stream-experimental" % "0.10",
+    "com.typesafe.akka"          %%  "akka-stream-experimental" % "1.0-RC3",
     "io.scalac"                  %%  "reactive-rabbit"          % "0.2.1",
     "com.typesafe.scala-logging" %%  "scala-logging-slf4j"      % "2.1.2",
     "ch.qos.logback"             %   "logback-core"             % "1.1.2",

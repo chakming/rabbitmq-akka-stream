@@ -6,8 +6,8 @@ import scala.util.{Failure, Success}
 import akka.actor.ActorSystem
 import akka.util.ByteString
 
-import akka.stream.FlowMaterializer
-import akka.stream.scaladsl.{OnCompleteSink, Source, Sink}
+import akka.stream.ActorFlowMaterializer
+import akka.stream.scaladsl.{Source, Sink}
 
 import com.typesafe.scalalogging.slf4j.LazyLogging
 
@@ -22,7 +22,7 @@ object ConsumerApp extends App with FlowFactory with LazyLogging {
   
   import actorSystem.dispatcher
   
-  implicit val materializer = FlowMaterializer()
+  implicit val materializer = ActorFlowMaterializer()
   
   val connection = Connection()
   
@@ -80,7 +80,7 @@ object ConsumerApp extends App with FlowFactory with LazyLogging {
    * Both streams are set up to die after performing their purpose.
    */
   def trialRun() = {
-    val trialMessages = "message 1" :: "message 2" :: "message 3" :: "message 4" :: "message 5" :: Nil
+    val trialMessages = "message 1" :: "message 2" :: "message 3" :: "message 4" :: "message 5" :: "terror 1" :: "terror 2" :: "terror 3" :: Nil
     
     /* publish couple of trial messages to the inbound exchange */
     Source(trialMessages).
@@ -91,7 +91,7 @@ object ConsumerApp extends App with FlowFactory with LazyLogging {
     Source(connection.consume(outOkQueue.name)).
       take(trialMessages.size).
       map(msg => logger.info(s"'${msg.message.body.utf8String}' delivered to ${outOkQueue.name}")).
-      runWith(new OnCompleteSink({ 
+      runWith(Sink.onComplete({ 
         case Success(_) => logger.info("Trial run finished. You can now go to http://localhost:15672/ and try publishing messages manually.")
         case Failure(ex) => logger.error("Trial run finished with error.", ex)}))
   }

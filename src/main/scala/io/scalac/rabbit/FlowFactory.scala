@@ -1,7 +1,6 @@
 package io.scalac.rabbit
 
 import scala.concurrent.ExecutionContext
-
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 
@@ -23,24 +22,24 @@ import io.scalac.rabbit.RabbitRegistry._
 trait FlowFactory extends LazyLogging {
   
   /** Flow responsible for mapping the incoming RabbitMQ message to our domain input. */
-  def consumerMapping: Flow[Delivery, ByteString] =
+  def consumerMapping =
     Flow[Delivery].map(_.message.body)
   
   /** Flow performing our domain processing. */
-  def domainProcessing(implicit ex: ExecutionContext): Flow[ByteString, CensoredMessage] = 
+  def domainProcessing(implicit ex: ExecutionContext) = 
     Flow[ByteString].
   
     // to string
     map { _.utf8String }.
     
     // do something time consuming
-    mapAsync { DomainService.expensiveCall }.
+    //mapAsync { DomainService.expensiveCall _ }.
 
     // classify message
-    map { DomainService.classify }
+    map { DomainService.classify _ }
     
   /** Flow responsible for mapping the domain processing result into a RabbitMQ message. */
-  def publisherMapping: Flow[CensoredMessage, Routed] = 
+  def publisherMapping = 
     Flow[CensoredMessage] map(cMsg => cMsg match {
       case MessageSafe(msg) => Routed(routingKey = outOkQueue.name, Message(body = ByteString(cMsg.message)))
       case MessageThreat(msg) => Routed(routingKey = outNokQueue.name, Message(body = ByteString(cMsg.message)))
