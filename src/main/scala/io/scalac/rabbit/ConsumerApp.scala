@@ -6,7 +6,7 @@ import scala.util.{Failure, Success}
 import akka.actor.ActorSystem
 import akka.util.ByteString
 
-import akka.stream.ActorFlowMaterializer
+import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Source, Sink}
 
 import com.typesafe.scalalogging.slf4j.LazyLogging
@@ -22,7 +22,7 @@ object ConsumerApp extends App with FlowFactory with LazyLogging {
   
   import actorSystem.dispatcher
   
-  implicit val materializer = ActorFlowMaterializer()
+  implicit val materializer = ActorMaterializer()
   
   val connection = Connection()
   
