@@ -32,8 +32,8 @@ trait FlowFactory extends LazyLogging {
     // to string
     map { _.utf8String }.
     
-    // do something time consuming
-    //mapAsync { DomainService.expensiveCall _ }.
+    // do something time consuming, allow 4 futures to run in parallel
+    mapAsync(4) { DomainService.expensiveCall _ }.
 
     // classify message
     map { DomainService.classify _ }
