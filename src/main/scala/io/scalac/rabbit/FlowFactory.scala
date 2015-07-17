@@ -22,11 +22,11 @@ import io.scalac.rabbit.RabbitRegistry._
 trait FlowFactory extends LazyLogging {
   
   /** Flow responsible for mapping the incoming RabbitMQ message to our domain input. */
-  def consumerMapping =
+  def consumerMapping: Flow[Delivery, ByteString, _] =
     Flow[Delivery].map(_.message.body)
   
   /** Flow performing our domain processing. */
-  def domainProcessing(implicit ex: ExecutionContext) = 
+  def domainProcessing(implicit ex: ExecutionContext): Flow[ByteString, CensoredMessage, _]  = 
     Flow[ByteString].
   
     // to string
