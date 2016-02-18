@@ -4,7 +4,7 @@ version := "2.0"
 
 organization := "io.scalac"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.7"
 
 resolvers ++= Seq(
   "snapshots"           at "http://oss.sonatype.org/content/repositories/snapshots",
@@ -19,15 +19,14 @@ scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation", "-encoding", "ut
 
 libraryDependencies ++= {
   Seq(
-    "com.typesafe.akka"          %%  "akka-actor"               % "2.3.7",
-    "com.typesafe.akka"          %%  "akka-stream-experimental" % "0.10",
-    "io.scalac"                  %%  "reactive-rabbit"          % "0.2.1",
+    "com.typesafe.akka"          %%  "akka-actor"               % "2.4.2",
+    "com.typesafe.akka"          %%  "akka-stream-experimental" % "2.0.3",
+    "io.scalac"                  %%  "reactive-rabbit"          % "1.0.3",
     "com.typesafe.scala-logging" %%  "scala-logging-slf4j"      % "2.1.2",
-    "ch.qos.logback"             %   "logback-core"             % "1.1.2",
-    "ch.qos.logback"             %   "logback-classic"          % "1.1.2",
-    "org.scalatest"              %%  "scalatest"                % "2.2.1" % "test"
+    "ch.qos.logback"             %   "logback-core"             % "1.1.5",
+    "ch.qos.logback"             %   "logback-classic"          % "1.1.5",
+    "org.scalatest"              %%  "scalatest"                % "2.2.6" % "test"
   )
 }
-
 
 fork in run := true
